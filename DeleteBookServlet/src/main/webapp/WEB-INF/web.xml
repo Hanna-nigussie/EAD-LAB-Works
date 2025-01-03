@@ -1,9 +1,0 @@
-<servlet>
-    <servlet-name>DeleteBookServlet</servlet-name>
-    <servlet-class>com.bookstoreapp.servlet.DeleteBookServlet</servlet-class>
-</servlet>
-
-<servlet-mapping>
-    <servlet-name>DeleteBookServlet</servlet-name>
-    <url-pattern>/DeleteBookServlet</url-pattern>
-</servlet-mapping>

@@ -1,9 +1,0 @@
-<servlet>
-    <servlet-name>DisplayBooksServlet</servlet-name>
-    <servlet-class>com.bookstoreapp.servlet.DisplayBooksServlet</servlet-class>
-</servlet>
-
-<servlet-mapping>
-    <servlet-name>DisplayBooksServlet</servlet-name>
-    <url-pattern>/DisplayBooksServlet</url-pattern>
-</servlet-mapping>
