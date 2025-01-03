@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Task Registration</title>
+</head>
+<body>
+    <h2>Task Registration</h2>
+    <form action="registerTask" method="post">
+        <label for="description">Task Description:</label><br>
+        <input type="text" id="description" name="description" required><br><br>
+        
+        <label for="status">Status:</label><br>
+        <select id="status" name="status">
+            <option value="Pending">Pending</option>
+            <option value="Completed">Completed</option>
+        </select><br><br>
+
+        <label for="due_date">Due Date:</label><br>
+        <input type="date" id="due_date" name="due_date" required><br><br>
+
+        <input type="submit" value="Register Task">
+    </form>
+</body>
+</html>

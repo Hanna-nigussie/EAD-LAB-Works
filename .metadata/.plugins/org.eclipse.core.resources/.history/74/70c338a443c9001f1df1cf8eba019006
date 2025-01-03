@@ -1,0 +1,5 @@
+package com.todoapp.model;
+
+public class Task {
+
+}
