@@ -2,8 +2,6 @@
 // Hanna Nigussie
 //UGR/9180/14
 
-
-
 package com.application;
 
 import org.springframework.boot.SpringApplication;
@@ -15,7 +13,7 @@ import org.springframework.context.annotation.Configuration;
 @SpringBootApplication
 @ServletComponentScan("com.labexam")
 @Configuration("applicationContext.xml")
-@ComponentScan("com.labexam")
+@ComponentScan("com.EAD_lab_exam")
 public class Application {
 
     public static void main(String[] args) {
