@@ -1,17 +1,21 @@
 package com.question2;
 
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
 public class LombokTest {
-    private String name = "ONLINEBOOKS";
+
+    private String name;
+    private String category;
+    private int stock;
 
     public static void main(String[] args) {
-        LombokTest lombokTest = new LombokTest();
-        System.out.println(lombokTest.getName());
+        LombokTest book = new LombokTest();
+        book.setName("ONLINEBOOKS");
+        book.setCategory("Fiction");
+        book.setStock(100);
+        System.out.println(book);
     }
 }

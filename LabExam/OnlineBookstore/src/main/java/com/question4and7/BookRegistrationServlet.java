@@ -20,54 +20,71 @@ import jakarta.servlet.http.HttpServletResponse;
 public class BookRegistrationServlet extends HttpServlet {
     private static final long serialVersionUID = 1L;
 
+    private static final String TABLE_NAME = "Books";
+    private static final String INSERT_QUERY = "INSERT INTO " + TABLE_NAME + " (title, author, price) VALUES (?, ?, ?)";
+
     private final DBConnectionManager manager;
-    private final String tableName = "Books";
-    private final String query = "INSERT INTO " + tableName + " (title, author, price) VALUES (?, ?, ?)";
 
     @Autowired
     public BookRegistrationServlet(DBConnectionManager manager) {
-        super();
         this.manager = manager;
     }
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-        res.setContentType("text/html");
-        PrintWriter pw = res.getWriter();
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        response.setContentType("text/html");
+        try (PrintWriter out = response.getWriter()) {
+            String title = request.getParameter("title");
+            String author = request.getParameter("author");
+            String priceInput = request.getParameter("price");
 
-        String title = req.getParameter("title");
-        String author = req.getParameter("author");
-        float price;
-
-        try {
-            price = Float.parseFloat(req.getParameter("price"));
-        } catch (NumberFormatException nfe) {
-            pw.println("<h2>Invalid price format. Please try again.</h2>");
-            return;
-        }
-
-        try (Connection con = manager.openConnection();
-                PreparedStatement ps = con.prepareStatement(query)) {
-            ps.setString(1, title);
-            ps.setString(2, author);
-            ps.setFloat(3, price);
-
-            int count = ps.executeUpdate();
-            if (count == 1) {
-                pw.println("<h2>Book Registered Successfully</h2>");
-            } else {
-                pw.println("<h2>Failed to Register Book</h2>");
+            if (title == null || title.isEmpty() || author == null || author.isEmpty() || priceInput == null
+                    || priceInput.isEmpty()) {
+                out.println(
+                        "<h2 style='color: red;'>All fields are required. Please fill out the form completely.</h2>");
+                displayHomeAndListLinks(out);
+                return;
             }
-        } catch (SQLException se) {
-            se.printStackTrace();
-            pw.println("<h2>Database Error: " + se.getMessage() + "</h2>");
-        } catch (Exception e) {
-            e.printStackTrace();
-            pw.println("<h2>Unexpected Error: " + e.getMessage() + "</h2>");
-        }
 
-        pw.println("<a href='index.html'>Home</a>");
-        pw.println("<br>");
-        pw.println("<a href='bookList'>Book List</a>");
+            float price;
+            try {
+                price = Float.parseFloat(priceInput);
+            } catch (NumberFormatException e) {
+                out.println("<h2 style='color: red;'>Invalid price format. Please enter a valid number.</h2>");
+                displayHomeAndListLinks(out);
+                return;
+            }
+
+            try (Connection connection = manager.openConnection();
+                    PreparedStatement statement = connection.prepareStatement(INSERT_QUERY)) {
+
+                statement.setString(1, title);
+                statement.setString(2, author);
+                statement.setFloat(3, price);
+
+                int result = statement.executeUpdate();
+                if (result == 1) {
+                    out.println("<h2 style='color: green;'>Book added successfully!</h2>");
+                } else {
+                    out.println("<h2 style='color: red;'>Failed to add the book. Please try again later.</h2>");
+                }
+
+            } catch (SQLException e) {
+                handleDatabaseError(out, e);
+            }
+
+            displayHomeAndListLinks(out);
+        }
+    }
+
+    private void handleDatabaseError(PrintWriter out, SQLException exception) {
+        out.println("<h2 style='color: red;'>A database error occurred. Please try again later.</h2>");
+        out.println("<p>Error Details: " + exception.getMessage() + "</p>");
+    }
+
+    private void displayHomeAndListLinks(PrintWriter out) {
+        out.println("<br><a href='index.html' class='btn btn-primary'>Return to Home</a>");
+        out.println("<a href='bookList' class='btn btn-secondary'>View Book List</a>");
     }
 }
