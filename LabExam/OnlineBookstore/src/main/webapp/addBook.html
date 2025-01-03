@@ -1,31 +1,114 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Add Task</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container mt-5">
-        <h2 class="mb-4">Add New Book</h2>
-        <form action="register" method="post">
-            <div class="mb-3">
-                <label for="description" class="form-label">Title</label>
-                <input type="text" class="form-control" id="description" name="title" required>
-            </div>
-            <div class="mb-3">
-                <label for="author" class="form-label">Author</label>
-                <input type="text" class="form-control" id="author" name="author" required>
-            </div>
-            <div class="mb-3">
-                <label for="date" class="form-label">Price</label>
-                <input type="text" class="form-control" id="date" name="price" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Add Book</button>
-            <a href="index.html" class="btn btn-secondary">Cancel</a>
-        </form>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Add Book</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .container {
+        max-width: 600px;
+        margin-top: 50px;
+        padding: 30px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      }
+      .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+      }
+      .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+      }
+      .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+      }
+      .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+      }
+      h2 {
+        font-family: "Arial", sans-serif;
+        font-weight: 600;
+        color: #007bff;
+      }
+      .form-label {
+        font-size: 1.1rem;
+        font-weight: 500;
+      }
+      .form-control {
+        border-radius: 8px;
+        box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+      .form-control:focus {
+        box-shadow: 0 0 0 0.25rem rgba(38, 143, 255, 0.5);
+      }
+      .form-group {
+        margin-bottom: 1.5rem;
+      }
+      .cancel-btn {
+        text-decoration: none;
+        margin-left: 10px;
+      }
+      .cancel-btn:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="mb-4 text-center">Add New Book</h2>
+      <form action="register" method="post">
+        <div class="form-group mb-4">
+          <label for="title" class="form-label">Book Title</label>
+          <input
+            type="text"
+            class="form-control"
+            id="title"
+            name="title"
+            required
+            placeholder="Enter the title of the book"
+          />
+        </div>
+        <div class="form-group mb-4">
+          <label for="author" class="form-label">Author</label>
+          <input
+            type="text"
+            class="form-control"
+            id="author"
+            name="author"
+            required
+            placeholder="Enter the author's name"
+          />
+        </div>
+        <div class="form-group mb-4">
+          <label for="price" class="form-label">Price ($)</label>
+          <input
+            type="number"
+            class="form-control"
+            id="price"
+            name="price"
+            step="0.01"
+            required
+            placeholder="Enter the price of the book"
+          />
+        </div>
+        <div class="d-flex justify-content-between">
+          <button type="submit" class="btn btn-primary">Add Book</button>
+          <a href="index.html" class="btn btn-secondary cancel-btn">Cancel</a>
+        </div>
+      </form>
     </div>
-    <script src="js/bootstrap.min.js"></script>
-</body>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+  </body>
 </html>

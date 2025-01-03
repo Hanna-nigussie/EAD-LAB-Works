@@ -5,9 +5,11 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.logging.Logger;
 
 public class DispatcherServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+	private static final Logger logger = Logger.getLogger(DispatcherServlet.class.getName());
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -27,22 +29,35 @@ public class DispatcherServlet extends HttpServlet {
 		String contextPath = request.getContextPath();
 		String requestPath = path.substring(contextPath.length());
 
-		if (requestPath.startsWith("/bookList")) {
-			request.getRequestDispatcher("/bookList").forward(request, response);
-		} else if (requestPath.startsWith("/") || requestPath.startsWith("/index.html")) {
-			request.getRequestDispatcher("/index.html").forward(request, response);
-		} else if (requestPath.startsWith("/search.html")) {
-			request.getRequestDispatcher("/search.html").forward(request, response);
-		} else if (requestPath.startsWith("/addBook.html")) {
-			request.getRequestDispatcher("/addBook.html").forward(request, response);
-		} else if (requestPath.startsWith("/editScreen")) {
-			request.getRequestDispatcher("/editScreen").forward(request, response);
-		} else if (requestPath.startsWith("/editurl")) {
-			request.getRequestDispatcher("/editurl").forward(request, response);
-		} else {
-			response.getWriter().println("Invalid URL");
-			response.setStatus(HttpServletResponse.SC_NOT_FOUND);
-		}
+		// Log the requested path for debugging and monitoring purposes
+		logger.info("Requested path: " + requestPath);
 
+		// Handle various requests based on the URL path
+		switch (requestPath) {
+			case "/bookList":
+				request.getRequestDispatcher("/bookList").forward(request, response);
+				break;
+			case "/index.html":
+				request.getRequestDispatcher("/index.html").forward(request, response);
+				break;
+			case "/search.html":
+				request.getRequestDispatcher("/search.html").forward(request, response);
+				break;
+			case "/addBook.html":
+				request.getRequestDispatcher("/addBook.html").forward(request, response);
+				break;
+			case "/editScreen":
+				request.getRequestDispatcher("/editScreen").forward(request, response);
+				break;
+			case "/editurl":
+				request.getRequestDispatcher("/editurl").forward(request, response);
+				break;
+			default:
+				// Handle invalid URL
+				logger.warning("Invalid URL accessed: " + requestPath);
+				response.getWriter().println("Invalid URL: " + requestPath);
+				response.setStatus(HttpServletResponse.SC_NOT_FOUND);
+				break;
+		}
 	}
 }

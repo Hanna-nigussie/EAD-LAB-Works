@@ -15,7 +15,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import com.question1and3.DBConnectionManager;
 
-
 @WebServlet("/bookList")
 public class DisplayBooksServlet extends HttpServlet {
 
@@ -23,22 +22,25 @@ public class DisplayBooksServlet extends HttpServlet {
 
     @Autowired
     private DBConnectionManager manager;
-    private String tableName = "Books";
-    private final String query = "SELECT ID,title,author,price FROM " + tableName;
+
+    private static final String TABLE_NAME = "Books";
+    private static final String SELECT_QUERY = "SELECT ID, title, author, price FROM " + TABLE_NAME;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-
         PrintWriter pw = res.getWriter();
         res.setContentType("text/html");
 
         try {
-            Class.forName("com.mysql.cj.jdbc.Driver");
-        } catch (ClassNotFoundException cnf) {
-            cnf.printStackTrace();
+            displayBooks(pw);
+        } catch (SQLException | ClassNotFoundException e) {
+            handleError(pw, e.getMessage());
         }
+    }
 
-        try (Connection con = manager.openConnection(); PreparedStatement ps = con.prepareStatement(query);) {
+    private void displayBooks(PrintWriter pw) throws SQLException, ClassNotFoundException {
+        try (Connection con = manager.openConnection();
+                PreparedStatement ps = con.prepareStatement(SELECT_QUERY)) {
             ResultSet rs = ps.executeQuery();
             pw.println("<table border='1' align='center'>");
             pw.println("<tr>");
@@ -49,24 +51,23 @@ public class DisplayBooksServlet extends HttpServlet {
             pw.println("<th>Edit</th>");
             pw.println("<th>Delete</th>");
             pw.println("</tr>");
+
             while (rs.next()) {
                 pw.println("<tr>");
-                pw.println("<td>" + rs.getInt(1) + "</td>");
-                pw.println("<td>" + rs.getString(2) + "</td>");
-                pw.println("<td>" + rs.getString(3) + "</td>");
-                pw.println("<td>" + rs.getFloat(4) + "</td>");
-                pw.println("<td><a href='editScreen?id=" + rs.getInt(1) + "'>Edit</a></td>");
-                pw.println("<td><a href='deleteurl?id=" + rs.getInt(1) + "'>Delete</a></td>");
+                pw.println("<td>" + rs.getInt("ID") + "</td>");
+                pw.println("<td>" + rs.getString("title") + "</td>");
+                pw.println("<td>" + rs.getString("author") + "</td>");
+                pw.println("<td>" + rs.getFloat("price") + "</td>");
+                pw.println("<td><a href='editScreen?id=" + rs.getInt("ID") + "'>Edit</a></td>");
+                pw.println("<td><a href='deleteurl?id=" + rs.getInt("ID") + "'>Delete</a></td>");
                 pw.println("</tr>");
             }
             pw.println("</table>");
-        } catch (SQLException se) {
-            se.printStackTrace();
-            pw.println("<h1>" + se.getMessage() + "</h2>");
-        } catch (Exception e) {
-            e.printStackTrace();
-            pw.println("<h1>" + e.getMessage() + "</h2>");
         }
+    }
+
+    private void handleError(PrintWriter pw, String errorMessage) {
+        pw.println("<h1>Error: " + errorMessage + "</h1>");
         pw.println("<a href='index.html'>Home</a>");
     }
 }

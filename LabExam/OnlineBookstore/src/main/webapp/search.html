@@ -1,38 +1,106 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Search Books</title>
-    <link rel="stylesheet" href="css/bootstrap.min.css">
-</head>
-<body>
-    <div class="container mt-5">
-        <h2 class="mb-4">Search Books</h2>
-        <form action="searchList" method="get">
-            <div class="mb-3">
-                <label for="searchTerm" class="form-label">Search Term</label>
-                <input type="text" class="form-control" id="searchTerm" name="searchTerm" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Search</button>
-            <a href="index.html" class="btn btn-secondary">Cancel</a>
-        </form>
-        <div id="searchResultsContainer">
-            <!-- Search results will be loaded here by the servlet -->
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css"
+    />
+    <style>
+      body {
+        background-color: #f8f9fa;
+      }
+      .container {
+        margin-top: 80px;
+        background-color: #ffffff;
+        padding: 40px;
+        border-radius: 15px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      }
+      h2 {
+        font-family: "Arial", sans-serif;
+        color: #007bff;
+      }
+      .form-label {
+        font-size: 1.1em;
+      }
+      .form-control {
+        font-size: 1.1em;
+        border-radius: 25px;
+      }
+      .btn {
+        border-radius: 25px;
+        padding: 12px 30px;
+        font-size: 16px;
+      }
+      .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+      }
+      .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+      }
+      .btn-secondary {
+        background-color: #6c757d;
+        border-color: #6c757d;
+      }
+      .btn-secondary:hover {
+        background-color: #5a6268;
+        border-color: #545b62;
+      }
+      #searchResultsContainer {
+        margin-top: 30px;
+      }
+      .no-results {
+        color: #d9534f;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h2 class="mb-4">Search Books</h2>
+      <form action="searchList" method="get">
+        <div class="mb-3">
+          <label for="searchTerm" class="form-label">Search Term</label>
+          <input
+            type="text"
+            class="form-control"
+            id="searchTerm"
+            name="searchTerm"
+            placeholder="Enter book title or author"
+            required
+          />
         </div>
+        <button type="submit" class="btn btn-primary">Search</button>
+        <a href="index.html" class="btn btn-secondary">Cancel</a>
+      </form>
+      <div id="searchResultsContainer">
+        <!-- Search results will be loaded here by the servlet -->
+      </div>
     </div>
-    <script src="js/bootstrap.min.js"></script>
-      <script>
-          const form = document.querySelector('form');
-        form.addEventListener('submit', function(event){
-          event.preventDefault();
-          const searchTerm = document.getElementById('searchTerm').value;
-            fetch(`searchList?searchTerm=${searchTerm}`)
-              .then(response => response.text())
-              .then(data => {
-                document.getElementById('searchResultsContainer').innerHTML = data;
-              });
-        });
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+      const form = document.querySelector("form");
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+        const searchTerm = document.getElementById("searchTerm").value;
+        fetch(`searchList?searchTerm=${searchTerm}`)
+          .then((response) => response.text())
+          .then((data) => {
+            const resultsContainer = document.getElementById(
+              "searchResultsContainer"
+            );
+            if (data.trim().length === 0) {
+              resultsContainer.innerHTML = `<p class="no-results">No books found for "${searchTerm}"</p>`;
+            } else {
+              resultsContainer.innerHTML = data;
+            }
+          });
+      });
     </script>
-</body>
+  </body>
 </html>

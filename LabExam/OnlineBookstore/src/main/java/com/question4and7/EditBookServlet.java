@@ -17,48 +17,55 @@ import com.question1and3.DBConnectionManager;
 @WebServlet("/editurl")
 public class EditBookServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
+
 	@Autowired
 	private DBConnectionManager manager;
-	private String tableName = "Books";
-	private final String query = "update "+tableName+" set title=?,author=?,price=? where id=?";
+	private final String tableName = "Books";
+	private final String query = "UPDATE " + tableName + " SET title = ?, author = ?, price = ? WHERE id = ?";
 
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse res) throws ServletException, IOException {
-
-		PrintWriter pw = res.getWriter();
 		res.setContentType("text/html");
-		int id = Integer.parseInt(req.getParameter("id"));
+		PrintWriter pw = res.getWriter();
 
+		int id;
 		String title = req.getParameter("title");
 		String author = req.getParameter("author");
-		String price = req.getParameter("price");
+		float price;
+
+		// Validate and parse parameters
 		try {
-			Class.forName("com.mysql.cj.jdbc.Driver");
-		} catch (ClassNotFoundException cnf) {
-			cnf.printStackTrace();
+			id = Integer.parseInt(req.getParameter("id"));
+			price = Float.parseFloat(req.getParameter("price"));
+		} catch (NumberFormatException e) {
+			pw.println("<h2>Invalid input for ID or price. Please try again.</h2>");
+			return;
 		}
-		try (Connection con = manager.openConnection(); PreparedStatement ps = con.prepareStatement(query);) {
+
+		try (Connection con = manager.openConnection();
+				PreparedStatement ps = con.prepareStatement(query)) {
 			ps.setString(1, title);
 			ps.setString(2, author);
-			ps.setString(3, price);
+			ps.setFloat(3, price);
 			ps.setInt(4, id);
+
 			int count = ps.executeUpdate();
 			if (count == 1) {
-				pw.println("<h2>Book is Edited Successfully</h2>");
+				pw.println("<h2>Book Edited Successfully</h2>");
 			} else {
-				pw.println("<h2>Book is not Edited Successfully</h2>");
+				pw.println("<h2>Failed to Edit Book</h2>");
 			}
 		} catch (SQLException se) {
 			se.printStackTrace();
-			pw.println("<h1>" + se.getMessage() + "</h2>");
+			pw.println("<h2>Database Error: " + se.getMessage() + "</h2>");
 		} catch (Exception e) {
 			e.printStackTrace();
-			pw.println("<h1>" + e.getMessage() + "</h2>");
+			pw.println("<h2>Unexpected Error: " + e.getMessage() + "</h2>");
 		}
+
 		pw.println("<a href='index.html'>Home</a>");
 		pw.println("<br>");
 		pw.println("<a href='bookList'>Book List</a>");
-
 	}
 
 	@Override
