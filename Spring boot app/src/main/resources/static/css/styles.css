@@ -1,0 +1,16 @@
+body {
+    background-color: #f0f8ff;
+    text-align: center;
+    font-family: 'Arial', sans-serif;
+}
+
+h1 {
+    color: #007bff;
+    margin-top: 50px;
+}
+
+.btn-custom {
+    width: 160px;
+    font-size: 18px;
+    margin: 10px;
+}

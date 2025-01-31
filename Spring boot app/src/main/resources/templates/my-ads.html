@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>My Ads - Service Scheduling System</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" />
+</head>
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm">
+        <div class="container">
+            <a class="navbar-brand" href="/">🛠️ Service Scheduler</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/company/dashboard}">🏠 Dashboard</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-primary" th:href="@{/company/post-ad}">➕ Post New Ad</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-danger" th:href="@{/logout}">🚪 Logout</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <!-- My Ads Section -->
+    <div class="container mt-5">
+        <h2 class="text-center mb-4">📢 My Recent Ads</h2>
+
+        <div class="row">
+            <!-- Example Ads (Pre-loaded) -->
+            <div class="col-md-4" th:each="ad : ${ads}">
+                <div class="card shadow-sm">
+                    <img th:src="@{${ad.imageUrl}}" class="card-img-top" alt="Ad Image">
+                    <div class="card-body">
+                        <h5 class="card-title" th:text="${ad.serviceName}">Service Name</h5>
+                        <p class="card-text"><strong>Price:</strong> $<span th:text="${ad.price}">100</span></p>
+                        <p class="card-text" th:text="${ad.description}">Short description...</p>
+                        <a href="#" class="btn btn-outline-primary btn-sm">✏️ Edit</a>
+                        <a href="#" class="btn btn-outline-danger btn-sm">🗑️ Delete</a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message if no ads are found -->
+            <div class="col-12 text-center mt-4" th:if="${#lists.isEmpty(ads)}">
+                <p class="text-muted">You haven't posted any ads yet. <a th:href="@{/company/post-ad}">Post one now!</a></p>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
